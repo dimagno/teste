@@ -69,6 +69,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
 </body>
+<template id="my-template">
+    <swal-title>
+        Save changes to "Untitled 1" before closing?
+    </swal-title>
+    <swal-icon type="warning" color="red"></swal-icon>
+    <swal-button type="confirm">
+        Save As
+    </swal-button>
+    <swal-button type="cancel">
+        Cancel
+    </swal-button>
+    <swal-button type="deny">
+        Close without Saving
+    </swal-button>
+    <swal-param name="allowEscapeKey" value="false" />
+    <swal-param
+        name="customClass"
+        value='{ "popup": "my-popup" }' />
+    <swal-function-param
+        name="didOpen"
+        value="popup => console.log(popup)" />
+</template>
 
 </html>
 
@@ -221,7 +243,7 @@
             var nome = $('#nome').val() // Nome
             var creci = $('#creci').val() // Creci
             var cpf = $('#cpf').val(); // CPF
-           
+
             formData = {
                 id: id,
                 nome: nome,
@@ -244,8 +266,8 @@
                 });
                 listar()
                 $('.btn-salvar').text('Enviar')
-            $('.btn-salvar').addClass('btn-enviar')
-            $('.btn-salvar').removeClass('btn-salvar')
+                $('.btn-salvar').addClass('btn-enviar')
+                $('.btn-salvar').removeClass('btn-salvar')
             }).fail(function(error) {
                 console.log("Error: " + error)
             })
@@ -265,11 +287,29 @@
         $(document).on('click', '.btn-enviar', function(e) {
             console.log('click enviar');
             e.preventDefault();
-          
+
             validate();
         });
         $(document).on('click', '.remover-btn', function(e) {
-            remover($(this))
+            Swal.fire({
+                title: "Tem certeza que deseja remover esse corretor?",
+                text: "você não poderá reverter isso depois!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, apagar!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "deletado!",
+                        text: "corretor removido com sucesso",
+                        icon: "success"
+                    });
+                    
+             remover($(this))
+                }
+            });
         })
 
         function remover(element) {
@@ -293,7 +333,7 @@
                 })
                 listar()
             }).fail(function(error) {
-                console.log("err:"+error)
+                console.log("err:" + error)
             })
 
         }
